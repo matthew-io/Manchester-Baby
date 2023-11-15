@@ -13,29 +13,29 @@ Baby::Baby()
     regFour = "00000000000000000000000000000000";
 
     for (int i =0;i<storeCapacity;i++) {
-        for (int j=0;i<32;j++) {
+        for (int j=0;j<32;j++) {
             store[i][j] = 0;
         }
     }
 
 }
 
-// Baby::~Baby()
-// {
-//     for (int i=0;i<storeCapacity;i++)
-//     {
-//         for(int j=0;j<32;j++) {
-//             store[i][j] = 0;
-//         }
-//     }
+Baby::~Baby()
+{
+    for (int i=0;i<storeCapacity;i++)
+    {
+        for(int j=0;j<32;j++) {
+            store[i][j] = 0;
+        }
+    }
 
-//     storeCapacity = 0;
-//     acc = "";
-//     currentCmd = "";
-//     nextCmd = "";
-//     regFour = "";
+    storeCapacity = 0;
+    acc = "";
+    currentCmd = "";
+    nextCmd = "";
+    regFour = "";
 
-// }
+}
 
 int binaryToDecimal(string binary)
 {
@@ -48,6 +48,16 @@ int binaryToDecimal(string binary)
     }
 
     return decimal;
+}
+
+void Baby::printStore()
+{
+    for (int i =0;i<storeCapacity;i++) {
+        for (int j=0;j<storeCapacity;j++) {
+            cout << store[i][j];
+        }
+        cout << endl;
+    }
 }
 
 int getCurrentCmdAddress() 
@@ -64,7 +74,6 @@ void fetch()
 
 int getOperand() 
 {
-    
 }
 
 int getOpCode() 

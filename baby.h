@@ -20,10 +20,11 @@ private:
 public:
     int binaryToDecimal(const std::string binary);
     int getCurrentCmdAddress();
-    void incrementCurrentCmd() 
-    void fetch() 
-    int getOperand() 
-    int getOpCode() 
+    void incrementCurrentCmd();
+    void fetch();
+    int getOperand(); 
+    int getOpCode();
+    void printStore();
 
     Baby();
     ~Baby();
