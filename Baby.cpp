@@ -27,7 +27,7 @@ Baby::~Baby()
             store[i][j] = 0;
         }
     }
-    
+
     storageCapacity = 0;
     acc = "";
     currentCmd = "";
@@ -39,10 +39,10 @@ Baby::~Baby()
 
 int binaryToDecimal(string binary)
 {
-    int decimal = 0; // Corrected spelling from decmial
+    int decimal = 0;
 
     for (int i = 0; i < (binary.length()) - 1; i++) {
-        if (binary[i] == '1') { // Changed from 1 to '1'
+        if (binary[i] == '1') {
             decimal += pow(2, i);
         }
     } 

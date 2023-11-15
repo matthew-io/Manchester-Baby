@@ -8,8 +8,5 @@ using namespace std;
 
 int main()
 {
-    string binary = "1101";
-    int decimal = decimalToBinary(binary);
-
     return 0;
 }
