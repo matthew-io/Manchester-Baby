@@ -1,29 +1,29 @@
+#pragma once
 #ifndef BABY_H_
 #define BABY_H_
 
 #include <string>
 #include <bitset>
 
-int binaryToDecimal(const std::string binary);
-int getCurrentCmdAddress();
+using namespace std;
 
 class Baby
 {
 private:
-    bool store[32][32] = {{false}};
+    bool store[32][32] = { {false} };
     int storeCapacity = 32;
-    std::string acc;
-    std::string currentCmd;
-    std::string nextCmd;
-    std::string regFour;
+    string acc;
+    string currentCmd;
+    string nextCmd;
+    string regFour;
 
 public:
-    int binaryToDecimal(const std::string binary);
+    int binaryToDecimal(string binary);
     int getCurrentCmdAddress();
     void incrementCurrentCmd();
     void fetch();
-    int getOperand(); 
-    int getOpCode();
+    int getOperand(int ln);
+    int getOpCode(int ln);
     void printStore();
 
     Baby();
