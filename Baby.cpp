@@ -1,4 +1,5 @@
 #include <iostream>
+#include "binary.h"
 #include <string>
 #include <cmath>
 #include <bitset>
@@ -6,14 +7,14 @@
 
 Baby::Baby()
 {
-    storeSize = 32;
+    storeSize = SIZE;
     accumulator = "00000000000000000000000000000000";
     ci = "00000000000000000000000000000000";
     pi = "00000000000000000000000000000000";
 
     for (int i=0;i<storeSize;i++)
     {
-        for (int j=0;j<32;j++)
+        for (int j=0;j<storeSize;j++)
         {
             store[i][j] = 0;
         }
@@ -22,121 +23,6 @@ Baby::Baby()
 
 Baby::~Baby()
 {
-}
-
-string decimalToBinary(int decimal)
-{
-    if (decimal == 0) 
-    {
-        return "0";
-    }
-
-    std::string binary = "";
-    bool isNegative = decimal < 0;
-
-    if (isNegative)
-    {
-        decimal = -decimal;
-    }
-
-    while (decimal > 0)
-    {
-        binary = std::to_string(decimal % 2) + binary;
-        decimal /= 2;
-    }
-
-    while (binary.length() < 32)
-    {
-        binary = "0" + binary;
-    }
-
-    if (isNegative)
-    {
-        for (char &bit : binary)
-        {
-            bit = (bit == '0') ? '1' : '0';
-        }
-
-        bool carry = true;
-        for (int i = binary.length() - 1; i >= 0 && carry; --i)
-        {
-            if (binary[i] == '0')
-            {
-                binary[i] = '1';
-                carry = false;
-            }
-            else
-            {
-        binary[i] = '0';
-            }
-        }
-    }
-
-    return binary;
-}
-
-// needs changed
-
-int binaryToDecimal(string binary)
-{
-	int decimal = 0;
-
-	if (binary[binary.length() - 1] == '0' || binary.length() < 32)
-	{
-		for (unsigned int i=0; i<binary.length(); i++)
-		{
-			if (binary[i] == '1')
-			{
-				decimal += pow(2, i);
-			}
-		}
-	}
-	else if (binary[binary.length() - 1] == '1' && binary.length() == 32)
-	{
-		if (binary[0] == '1')
-		{
-			binary[0] ='0';
-		}
-	else
-	{
-		for (unsigned int i=0; i<binary.length(); i++)
-		{
-			if (binary[i] == '1')
-			{
-				binary[i] = '0';
-
-				for (int j=0; j>-1; j--)
-				{
-					binary[i] = '1';
-				}
-
-				break;
-			}
-		}
-	}
-
-	for (unsigned i=0; i<binary.length(); i++)
-	{
-		if (binary[i] == '0')
-		{
-			binary[i] = '1';
-		}
-		else
-			binary[i] = '0';
-		}
-
-		for (unsigned int i=0; i<binary.length(); i++)
-		{
-			if (binary[i] == '1')
-			{
-				decimal += pow(2, i);
-			}
-		}
-
-		decimal = decimal * -1;
-	}
-
-	return decimal;
 }
 
 void Baby::incrementCI()

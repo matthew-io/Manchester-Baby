@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-=======
-#pragma once
-#ifndef BABY_H_
-#define BABY_H_
-
->>>>>>> 8f0054484bef2b19d4ef37fdc8c89fde42c23a5d
 #include <string>
 
 using namespace std;
 
-<<<<<<< HEAD
 #define SIZE 32
 
 class Baby{
@@ -20,30 +12,9 @@ class Baby{
         bool store[SIZE][SIZE];
         string ci;
         string pi;
-=======
-class Baby
-{
-private:
-    bool store[32][32] = { {false} };
-    int storeCapacity = 32;
-    string acc;
-    string currentCmd;
-    string nextCmd;
-    string regFour;
-
-public:
-    int binaryToDecimal(string binary);
-    int getCurrentCmdAddress();
-    void incrementCurrentCmd();
-    void fetch();
-    int getOperand(int ln);
-    int getOpCode(int ln);
-    void printStore();
->>>>>>> 8f0054484bef2b19d4ef37fdc8c89fde42c23a5d
 
     public:
 
-<<<<<<< HEAD
         void printState();
         void addInstructionToStore(int lineNumber, string instruction);
         int getOpcode();
@@ -64,6 +35,3 @@ public:
         Baby();
         ~Baby();
 };
-=======
-#endif
->>>>>>> 8f0054484bef2b19d4ef37fdc8c89fde42c23a5d

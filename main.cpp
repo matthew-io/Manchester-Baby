@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
     char input;
-    
+
     while (input != '1')
     {
         cout << "Choose an option:" << endl;
@@ -57,19 +57,18 @@ int main()
         cout << "Unable to open file" << endl;
     }
 
-    bool stop = false;
+    bool quit = false;
 
     do {
         baby->incrementCI();
         int code = baby->fetch();
-
         baby->printState();
 
         if (code == 0)
         {
-            stop = true;
+            quit = true;
         }
-    } while (stop == false);
+    } while (quit == false);
 
     delete baby;
     return 0;
