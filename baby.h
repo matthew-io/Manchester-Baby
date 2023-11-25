@@ -1,33 +1,37 @@
-#ifndef BABY_H_
-#define BABY_H_
-
 #include <string>
-#include <bitset>
 
-int binaryToDecimal(const std::string binary);
-int getCurrentCmdAddress();
+using namespace std;
 
-class Baby
-{
-private:
-    bool store[32][32] = {{false}};
-    int storeCapacity = 32;
-    std::string acc;
-    std::string currentCmd;
-    std::string nextCmd;
-    std::string regFour;
+#define SIZE 32
 
-public:
-    int binaryToDecimal(const std::string binary);
-    int getCurrentCmdAddress();
-    void incrementCurrentCmd();
-    void fetch();
-    int getOperand(); 
-    int getOpCode();
-    void printStore();
+class Baby{
+    private: 
+    
+        int storeSize;
+        string accumulator;
+        bool store[SIZE][SIZE];
+        string ci;
+        string pi;
 
-    Baby();
-    ~Baby();
+    public:
+
+        void printState();
+        void addInstructionToStore(int lineNumber, string instruction);
+        int getOpcode();
+        int getOperand();
+        void incrementCI();
+        int fetch();
+        string getLineFromStore(int operand);
+        string negateBinary(const string& binaryValue);
+        int decode();
+
+        void JMP();
+        void JRP();
+        void LDN();
+        void STO();
+        int SUB();
+        void CMP();
+
+        Baby();
+        ~Baby();
 };
-
-#endif
