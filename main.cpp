@@ -1,37 +1,13 @@
 using namespace std;
-#include "Baby.h"
+#include "baby.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 
 int main()
 {
-<<<<<<< HEAD
     char input;
-    int inputSize = 32;
-=======
-
-
-    //string binary = "110";
-    //int decimal = baby->binaryToDecimal(binary);
-    //cout << decimal << endl;
-
-
-    Baby* baby = new Baby(); // Assuming you've properly allocated memory for the Baby object
-
-    // Initial value of currentCmd
-    cout << "Initial Address: " << baby->getCurrentCmdAddress() << endl;
-
-    // Increment and print multiple times
-    for (int i = 0; i < 3; ++i) {
-        baby->incrementCurrentCmd();
-        cout << "After Increment " << i + 1 << ": " << baby->getCurrentCmdAddress() << endl;
-    }
-
-    delete baby; // Don't forget to free the allocated memory
-
->>>>>>> 8f0054484bef2b19d4ef37fdc8c89fde42c23a5d
-
+    
     while (input != '1')
     {
         cout << "Choose an option:" << endl;
