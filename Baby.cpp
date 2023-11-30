@@ -4,6 +4,11 @@
 #include <cmath>
 #include <bitset>
 #include "baby.h"
+#include <stdlib.h>
+
+const std::string RED_TEXT = "\033[31m";
+const std::string GREEN_TEXT = "\033[32m";
+const std::string RESET_COLOR = "\033[0m";
 
 Baby::Baby()
 {
@@ -121,7 +126,6 @@ int Baby::fetch()
     }
     if (opcode == 7)
     {
-        cout << "Exiting the program..." << endl;
         return 0;
     }
 }
@@ -156,10 +160,18 @@ void Baby::printState()
         }
         cout << endl;
 	}
+
+    int opcode = getOpcode();
+    int operand = getOperand();
+    
+    cout << endl;
+    opcode == 7 ? cout << "STOP LIGHT: " << GREEN_TEXT << "ON" << RESET_COLOR << endl :
+    cout << "STOP LIGHT: " << RED_TEXT << "OFF" << RESET_COLOR << endl;
     cout << endl;
 	cout << "ACCUMULATOR: " << accumulator << " | " << binaryToDecimal(accumulator) << endl;
-	cout << "OPERAND: " << getOperand() << endl;
-	cout << "OPCODE: " << getOpcode() << endl;
+    cout << "OPERAND: " << operand << endl;
+	cout << "OPCODE: " << opcode << endl;
+    opcode == 7 ? cout << endl << "Exiting the program..." << endl : cout << "";
 }
 
 void Baby::addInstructionToStore(int lineNumber, string instruction)

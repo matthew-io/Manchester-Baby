@@ -77,6 +77,7 @@ int main()
 
         if (code == 0)
         {
+            baby->printState();
             quit = true;
         }
     } while (quit == false);
