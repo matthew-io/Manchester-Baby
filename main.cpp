@@ -5,6 +5,7 @@ using namespace std;
 #include <string>
 #include <algorithm>
 
+// function to display menu options
 void displayMenu()
 {
     cout << "Choose an option:" << endl;
@@ -15,6 +16,7 @@ void displayMenu()
 
 int main()
 {
+    // initialise vairable
     char input = 'a';
 
     while (input != '1')
@@ -23,6 +25,7 @@ int main()
 
         cin >> input;
 
+        // repeat until valid input is recieved
         while (input != '1' && input != '2')
         {
             cout << "Invalid input, please enter a valid option" << endl;
@@ -37,12 +40,14 @@ int main()
             cin >> input;
         }
 
+        // if input is 2 quit
         if (input == '2')
         {
             return 0;
         }
     }
 
+    // if input is 1 load a text file containing instructions
     Baby *baby = new Baby();
 
     string file_name;
@@ -52,7 +57,7 @@ int main()
     while (true) {
         cin >> file_name;
 
-        test_data.open("./input/" + file_name, ios::in);
+        test_data.open("/input/" + file_name, ios::in);
 
         if (test_data.is_open()) {
             string data;
@@ -62,14 +67,15 @@ int main()
                 lineNumber++;
             }
             test_data.close();
-            break;
-        } else {
+            break; // if able to open file break from loop
+        } else { // else repeat until valid input is recieved
             cout << "Unable to open file. Please try again: " << endl;
             test_data.clear();
         }
     }
 
     bool quit = false;
+
     do {
         baby->incrementCI();
         baby->printState();
