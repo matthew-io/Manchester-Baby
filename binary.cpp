@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// function that recieves a decimal value and converts it to a binary value
 string decimalToBinary(int decimal)
 {
     if (decimal == 0) 
@@ -12,7 +13,8 @@ string decimalToBinary(int decimal)
 
     std::string binary = "";
     bool isNegative = decimal < 0;
-
+    
+    // remove '-' sign from number if negative
     if (isNegative)
     {
         decimal = -decimal;
@@ -29,6 +31,7 @@ string decimalToBinary(int decimal)
         binary = "0" + binary;
     }
 
+    // if decimal value is negative
     if (isNegative)
     {
         for (char &bit : binary)
@@ -79,6 +82,7 @@ int invertAndAddOne(string binary) {
     return -decimal;
 }
 
+// function that recieves a positive binary value and converts it to a decimal value
 int positiveBinaryToDecimal(const string binary) {
     int decimal = 0;
     for (int i = 0; i < binary.length(); i++) {
@@ -89,6 +93,8 @@ int positiveBinaryToDecimal(const string binary) {
     return decimal;
 }
 
+
+// function that recieves a binary value and converts it to a decimal value
 int binaryToDecimal(string binary) {
     if (binary[binary.length() - 1] == '0' || binary.length() < 32) {
         return positiveBinaryToDecimal(binary);
