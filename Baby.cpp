@@ -52,44 +52,72 @@ int Baby::fetch()
     if (opcode == 0)
     {
         cout << "Executing the JMP instruction" << endl;
-        JMP();
-        return 1;
+        if (runOrTerminate() == 1) {
+            JMP();
+            return 1;
+        } else {
+            return 0;
+        }
     };
     if (opcode == 1)
     {
         cout << "Executing the JRP instruction" << endl;
-        JRP();
-        return 1;
+        if (runOrTerminate() == 1) {
+            JRP();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 2)
     {
         cout << "Executing the LDN instruction" << endl;
-        LDN();
-        return 1;
+        if (runOrTerminate() == 1) {
+            LDN();
+            return 1;
+        } else {
+            return 0;
+        }
     };
     if (opcode == 3)
     {
         cout << "Executing the STO instruction" << endl;
-        STO();
-        return 1;
+        if (runOrTerminate() == 1) {
+            STO();
+            return 1;
+        } else {
+            return 0;
+        }
     };
     if (opcode ==4)
     {
         cout << "Executing the SUB instruction" << endl;
-        SUB();
-        return 1;
+        if (runOrTerminate() == 1) {
+            SUB();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 5)
     {
         cout << "Executing the SUB instruction" << endl;
-        SUB();
-        return 1;
+        if (runOrTerminate() == 1) {
+            SUB();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 6)
     {
         cout << "Executing the CMP instruction" << endl;
-        CMP();
-        return 1;
+        if (runOrTerminate() == 1) {
+            CMP();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 7)
     {
@@ -98,17 +126,36 @@ int Baby::fetch()
     }
 }
 
+int runOrTerminate()
+{
+    char choice;
+
+    cout << "Press 'x' to continue executing the program or any other key to terminate this run." << endl;
+    cin >> choice;
+
+    if (choice == 'x')
+    {
+        return 1;
+    } else {
+        return 0;
+    }
+    
+    return 0;
+}
+
 void Baby::printState()
 {
     for (int i=0;i<storeSize;i++)
     {
+        cout << (i+1);
+        i < 9 ? cout << "    " : cout << "   ";
         for (int j=0;j<storeSize;j++) 
         {
             cout << store[i][j];
         }
         cout << endl;
 	}
-	cout << endl;
+    cout << endl;
 	cout << "ACCUMULATOR: " << accumulator << " | " << binaryToDecimal(accumulator) << endl;
 	cout << "OPERAND: " << getOperand() << endl;
 	cout << "OPCODE: " << getOpcode() << endl;
@@ -227,7 +274,7 @@ int Baby::SUB()
 	string binaryValue = getLineFromStore(lineNumber);
 	int result = binaryToDecimal(accumulator) - binaryToDecimal(binaryValue);
 
-	if (result > INT_MAX || result < INT_MIN)
+	if (result > MAX_NUM || result < MIN_NUM)
 	{
 		return 0;
 	}

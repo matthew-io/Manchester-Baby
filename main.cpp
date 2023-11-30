@@ -61,8 +61,8 @@ int main()
 
     do {
         baby->incrementCI();
-        int code = baby->fetch();
         baby->printState();
+        int code = baby->fetch();
 
         if (code == 0)
         {
