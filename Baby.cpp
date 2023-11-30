@@ -51,7 +51,7 @@ int Baby::fetch()
 
     if (opcode == 0)
     {
-        cout << "Executing the JMP instruction" << endl;
+        cout << "INSTRUCTION: JMP" << endl;
         if (runOrTerminate() == 1) {
             JMP();
             return 1;
@@ -61,7 +61,7 @@ int Baby::fetch()
     };
     if (opcode == 1)
     {
-        cout << "Executing the JRP instruction" << endl;
+        cout << "INSTRUCTION: JRP" << endl;
         if (runOrTerminate() == 1) {
             JRP();
             return 1;
@@ -71,7 +71,7 @@ int Baby::fetch()
     }
     if (opcode == 2)
     {
-        cout << "Executing the LDN instruction" << endl;
+        cout << "INSTRUCTION: LDN" << endl;
         if (runOrTerminate() == 1) {
             LDN();
             return 1;
@@ -81,7 +81,7 @@ int Baby::fetch()
     };
     if (opcode == 3)
     {
-        cout << "Executing the STO instruction" << endl;
+        cout << "INSTRUCTION: STO" << endl;
         if (runOrTerminate() == 1) {
             STO();
             return 1;
@@ -91,7 +91,7 @@ int Baby::fetch()
     };
     if (opcode ==4)
     {
-        cout << "Executing the SUB instruction" << endl;
+        cout << "INSTRUCTION: SUB" << endl;
         if (runOrTerminate() == 1) {
             SUB();
             return 1;
@@ -101,7 +101,7 @@ int Baby::fetch()
     }
     if (opcode == 5)
     {
-        cout << "Executing the SUB instruction" << endl;
+        cout << "INSTRUCTION: SUB" << endl;
         if (runOrTerminate() == 1) {
             SUB();
             return 1;
@@ -111,7 +111,7 @@ int Baby::fetch()
     }
     if (opcode == 6)
     {
-        cout << "Executing the CMP instruction" << endl;
+        cout << "INSTRUCTION: CMP" << endl;
         if (runOrTerminate() == 1) {
             CMP();
             return 1;
@@ -129,11 +129,12 @@ int Baby::fetch()
 int runOrTerminate()
 {
     char choice;
-
-    cout << "Press 'x' to continue executing the program or any other key to terminate this run." << endl;
+    
+    cout << endl;
+    cout << "Press 'e' to continue executing the program or any other key to terminate this run." << endl;
     cin >> choice;
 
-    if (choice == 'x')
+    if (choice == 'e')
     {
         return 1;
     } else {
@@ -315,6 +316,3 @@ void Baby::CMP()
         }
     }
 }
-
-
-

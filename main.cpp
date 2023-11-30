@@ -3,6 +3,15 @@ using namespace std;
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
+
+void displayMenu()
+{
+    cout << "Choose an option:" << endl;
+    cout << "[1] Load a text file containing instructions" << endl;
+    cout << "[2] Quit" << endl;
+}
+
 
 int main()
 {
@@ -10,15 +19,14 @@ int main()
 
     while (input != '1')
     {
-        cout << "Choose an option:" << endl;
-        cout << "[1] Load a text file containing instructions" << endl;
-        cout << "[2] Quit" << endl;
+        displayMenu();   
 
         cin >> input;
 
         while (input != '1' && input != '2')
         {
             cout << "Invalid input, please enter a valid option" << endl;
+            displayMenu();
 
             if (!cin)
             {
@@ -29,9 +37,6 @@ int main()
             cin >> input;
         }
 
-        cin.clear();
-        cin.ignore();
-
         if (input == '2')
         {
             return 0;
@@ -40,25 +45,31 @@ int main()
 
     Baby *baby = new Baby();
 
-    // baby->addInstruction(2, "11100000000000100000000000000000");
-    // baby->printStore();
-
+    string file_name;
     fstream test_data;
-    test_data.open("testcode.txt", ios::in);
-    if (test_data.is_open()) {
-        string data;
-        int lineNumber = 0;
-        while (getline(test_data, data)) {
-            baby->addInstructionToStore(lineNumber, data);
-            lineNumber++;
+
+    cout << "Enter the name of the file you would like to add: " << endl;
+    while (true) {
+        cin >> file_name;
+
+        test_data.open("./input/" + file_name, ios::in);
+
+        if (test_data.is_open()) {
+            string data;
+            int lineNumber = 0;
+            while (getline(test_data, data)) {
+                baby->addInstructionToStore(lineNumber, data);
+                lineNumber++;
+            }
+            test_data.close();
+            break;
+        } else {
+            cout << "Unable to open file. Please try again: " << endl;
+            test_data.clear();
         }
-        test_data.close();
-    } else {
-        cout << "Unable to open file" << endl;
     }
 
     bool quit = false;
-
     do {
         baby->incrementCI();
         baby->printState();
