@@ -10,6 +10,7 @@ const std::string RED_TEXT = "\033[31m";
 const std::string GREEN_TEXT = "\033[32m";
 const std::string RESET_COLOR = "\033[0m";
 
+// constructor
 Baby::Baby()
 {
     storeSize = SIZE;
@@ -26,13 +27,16 @@ Baby::Baby()
     }
 }
 
+// deconstructor
 Baby::~Baby()
 {
 }
 
+// function to incriement control instruction
 void Baby::incrementCI()
 {
     bool carry = true;
+    // increase binary number by one
     for (int i = 0; i < ci.length() && carry; i++)
     {
         if (ci[i] == '0')
@@ -47,13 +51,18 @@ void Baby::incrementCI()
     }
 }
 
+// function to fetch decode and executre
 int Baby::fetch()
 {
+    // fetch
     int lineNumber = binaryToDecimal(ci);
     pi = getLineFromStore(lineNumber);
 
+    // decode
 	int opcode = getOpcode();
 
+    // execute
+    // if statements for each possible opcode
     if (opcode == 0)
     {
         cout << "INSTRUCTION: JMP" << endl;
@@ -124,12 +133,15 @@ int Baby::fetch()
             return 0;
         }
     }
+    
+    // if 7 stop
     if (opcode == 7)
     {
         return 0;
     }
 }
 
+// function that gets user input to keep program running or end it
 int runOrTerminate()
 {
     char choice;
@@ -148,6 +160,7 @@ int runOrTerminate()
     return 0;
 }
 
+// function to print state of store and other variables
 void Baby::printState()
 {
     for (int i=0;i<storeSize;i++)
@@ -174,6 +187,7 @@ void Baby::printState()
     opcode == 7 ? cout << endl << "Exiting the program..." << endl : cout << "";
 }
 
+// function to add instruction to store
 void Baby::addInstructionToStore(int lineNumber, string instruction)
 {
     for(int i=0;i<32;i++)
@@ -187,6 +201,7 @@ void Baby::addInstructionToStore(int lineNumber, string instruction)
     }
 }
 
+// function to get opcode
 int Baby::getOpcode()
 {
     string opCode = "";
@@ -203,15 +218,17 @@ int Baby::getOperand()
 {
     string operand = "";
 
+    // recieve the binary value of the first 5 digits of the pi
     for (int i=0;i<5;i++)
     {
         operand += pi[i];
     }
 
+    // conver this binary value to a decimal value
     return binaryToDecimal(operand);
 }
 
-
+// function to get line from store
 string Baby::getLineFromStore(int lineNumber) 
 {
     string instruction = "";
@@ -224,12 +241,14 @@ string Baby::getLineFromStore(int lineNumber)
     return instruction;
 }
 
+// JMP set CI to content of store location
 void Baby::JMP()
 {
     int operand = getOperand();
     ci = getLineFromStore(operand);
 }  
 
+// JRP add content of store location to CI
 void Baby::JRP() {
   int operand = getOperand();
   int ciValue = binaryToDecimal(ci);
@@ -244,6 +263,7 @@ void Baby::JRP() {
   }
 }
 
+// LDN load accumulator with negative form of store content
 void Baby::LDN()
 {
 	int lineNumber = getOperand();
@@ -266,6 +286,7 @@ void Baby::LDN()
 	}
 }
 
+// STO copy accumulator to store location
 void Baby::STO()
 {
 	int lineNumber = getOperand();
@@ -281,6 +302,7 @@ void Baby::STO()
 	}
 }
 
+// SUB subrtract content of store location from accumulator
 int Baby::SUB()
 {
 	int lineNumber = getOperand();
@@ -309,6 +331,7 @@ int Baby::SUB()
 	return 1;
 }
 
+// CMP incremt CI if accumulator value is negative, otherwise do nothing
 void Baby::CMP()
 {
     if (accumulator[31] == '1')
