@@ -15,7 +15,7 @@ void displayMenu()
 
 int main()
 {
-    char input;
+    char input = 'a';
 
     while (input != '1')
     {
