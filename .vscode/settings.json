@@ -63,8 +63,7 @@
         "deque": "cpp",
         "fstream": "cpp",
         "iomanip": "cpp",
-        "stack": "cpp",
-        "*.tcc": "cpp"
+        "stack": "cp
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
