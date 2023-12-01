@@ -1,3 +1,14 @@
+/*
+
+AC21009 : Computer Systems 2A: Architecture Fundamentals and Unix
+Manchester Baby Assignment
+
+Matthew McConnachie
+Jessio Rodrigues
+Drew Webster
+
+*/
+
 using namespace std;
 #include "baby.h"
 #include <iostream>
