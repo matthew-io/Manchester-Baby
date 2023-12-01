@@ -3,6 +3,10 @@
 using namespace std;
 
 #define SIZE 32
+#define MAX_NUM 2147483647
+#define MIN_NUM -2147483647
+
+int runOrTerminate();
 
 class Baby{
     private: 
@@ -24,6 +28,7 @@ class Baby{
         string getLineFromStore(int operand);
         string negateBinary(const string& binaryValue);
         int decode();
+        
 
         void JMP();
         void JRP();
