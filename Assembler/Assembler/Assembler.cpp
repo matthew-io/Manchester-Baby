@@ -98,6 +98,10 @@
             variables.erase(it);
         }
     }
+
+    bool contains(const std::string& variable) const {
+        return variables.find(variable) != variables.end();
+    }
     };
 
     //Function to read file and store in vector
@@ -124,13 +128,30 @@
     }
 
     // Extention Function to report progress during Assembly
-    void reportProgress(const std::string&message){
+    void reportProgress(const std::string& message){
         std::cout<<"Progress:" << message << std::endl;
     }
 
+    void saveMachineCodeToFile(const std::vector<std::string>& saveMachineLines){
+    std::ofstream outputFile("testcode.txt");
+    if(outputFile.is_open()){
+        for (const auto& line : saveMachineLines){
+            outputFile << line << std::endl;
+        }
+        outputFile.close();
+        std::cout << "Machine code saved to testcode.txt" << std::endl;
+    } else {
+        throw std::runtime_error ("Error: Unable to save machine code to file");
+    }
+}
+
+
    //Function to convert assembly to machine code
-   void convertAssembly(const std::vector<std::string>& fileContent, SymbolTable& symbolTable, VariableMap& variableMap, std::map<std::string, std::string>& instructionSet) {
+   void convertAssembly(const std::vector<std::string>& fileContent, SymbolTable& symbolTable, VariableMap& variableMap, std::map<std::string, std::string>& instructionSet){
     std::string currentAddress = "$000";
+    int lineCount = 0;
+
+    std::vector<std::string> machineCodeLines;
 
     for (const std::string& line : fileContent) {
         std::istringstream iss(line);
@@ -159,9 +180,11 @@
             std::string machineCode;
             if (operand.empty()) {
                 machineCode = "00000";
-            } else {
+            } else if(variableMap.contains(operand)) {
                 machineCode = variableMap.getBinary(operand);
-            }
+            }else if(symbolTable.contains(operand)){
+                machineCode = symbolTable.getAddress(operand);
+            } 
 
             auto it = instructionSet.find(instruction);
             if (it != instructionSet.end()) {
@@ -173,16 +196,27 @@
 
             std::cout << machineCode << std::endl;
 
+            machineCodeLines.push_back(machineCode);
+
             int addressValue = std::stoi(currentAddress.substr(1), nullptr, 16);
             addressValue++;
             std::stringstream stream;
             stream << std::uppercase << std::setw(3) << std::setfill('0') << std::hex << addressValue;
             currentAddress = "$" + stream.str();
             
+            lineCount++;
+
             reportProgress("Processd Line"+std::to_string(lineCount)+ "/"+std::to_string(fileContent.size()));
         }
     }
     reportProgress("Assembly complete");
+
+    try{
+        saveMachineCodeToFile(machineCodeLines);
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    
+    }
 }
 
 
@@ -192,7 +226,7 @@ void codeBufferOutput(const std::string& machineCode) {
     }
 // Main function
 int main() {
-    std::vector<std::string> fileContent;
+    std::vector<std::string> fileContent{};
     SymbolTable symbolTable;
     VariableMap variableMap;
     std::map<std::string, std::string> instructionSet;
@@ -207,6 +241,7 @@ int main() {
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
     }
+
 
     return 0;
  }
