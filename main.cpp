@@ -112,8 +112,6 @@ int main()
         }
     } while (choice != 'y' && choice != 'n');
 
-    
-
     do {
         baby->incrementCI();
         baby->printStore();
@@ -136,23 +134,18 @@ void assembler() {
         SymbolTable symbolTable;
         VariableMap variableMap;
         map<string, string> instructionSet;
+
         InstructionSet instructions;
         instructionSet=instructions.instructions;
+
         string fileName;
-
         cout << "Enter file name: ";
-
         cin >> fileName;
 
         try {
-
             newFile(fileName, fileContent);
-
             convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
-
         } catch (const exception& e) {
-
             cout <<"Error occurred: "<< e.what() << endl;
-
         }
  }

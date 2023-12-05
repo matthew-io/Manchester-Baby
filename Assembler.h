@@ -1,452 +1,272 @@
-// Manchester Baby assembler
+
+        // Manchester Baby assembler
+
         #include <iostream>
-
         #include <fstream>
-
         #include <string>
-
         #include <vector>
-
         #include <sstream>
-
         #include <algorithm>
-
         #include <iterator>
-
         #include <map>
-
         #include <iomanip>
-
         #include <bitset>
-
 
         using namespace std;
 
-        //Store instruction set structure
-
+        //Store instruction set structure 
         struct InstructionSet {
-
-            std::map<std::string, std::string> instructions;
-
- 
+            map<string, string> instructions;
 
             //constructor to initialise instruction set with opcodes
-
             InstructionSet() {
-
                 instructions["JMP"] = "0000";
-
                 instructions["JRP"] = "0001";
-
                 instructions["LDN"] = "0010";
-
                 instructions["STO"] = "0011";
-
                 instructions["SUB"] = "0100";
-
                 instructions["CMP"] = "0101";
-
                 instructions["STP"] = "0110";
-
             }
-
         };
-
- 
 
         // Store symbol table structure
-
         struct SymbolTable {
+            map<string, string> symbols;
 
-            std::map<std::string, std::string> symbols;
-
- 
             // bool to check if symbol exists
-
-            bool contains(const std::string& symbol) const {
-
+            bool contains(const string& symbol) const {
                 return symbols.find(symbol) != symbols.end();
-
             }
-
- 
 
             // Get address of corressponding symbol
-
-            std::string getAddress(const std::string& symbol) const {
-
+            string getAddress(const string& symbol) const {
                 if (contains(symbol)) {
-
                     return symbols.at(symbol);
-
                 } else {
-
-                    throw std::invalid_argument("Symbol not found");
-
+                    throw invalid_argument("Symbol not found");
                 }
-
             }
-
- 
 
             // Remove symbol from symbol table
-
-            void removeSymbol(const std::string& symbol) {
-
+            void removeSymbol(const string& symbol) {
                 if (contains(symbol)) {
-
                     symbols.erase(symbol);
-
                 } else {
-
-                    throw std::invalid_argument("Symbol not found");
-
+                    throw invalid_argument("Symbol not found");
                 }
-
             }
-
- 
 
             // Add  all symbols to symbol table
-
-            std::vector<std::string> getSymbols() const {
-
-                std::vector<std::string> symbolList;
-
+            vector<string> getSymbols() const {
+                vector<string> symbolList;
                 for (const auto& symbol : symbols) {
-
-                    symbolList.push_back(symbol.first);
-
+                    symbolList.push_back(symbol.first); 
                 }
-
                 return symbolList;
-
             }
-
         };
-
-       
-
+        
         //Structure to store variables and their addresses
-
         struct VariableMap {
+            map<string, string> variables;
 
-            std::map<std::string, std::string> variables;
-
- 
-
-            void addVariable(const std::string& variable, const std::string& address) {
-
-                if (std::all_of(address.begin(), address.end(), ::isdigit)){
-
-                
-                
-
-                // variables[variable] = std::bitset<32>(std::stoi(address)).to_string();
-
-            }else{
-
-                throw std::runtime_error("Error: Invalid address");
-
+            void addVariable(const string& variable, const string& address) {
+                if (all_of(address.begin(), address.end(), ::isdigit)) {
+                    // int addr = stoi(address);
+                    // bitset<32> binaryAddress(addr);
+                    // variables[variable] = binaryAddress.to_string();
+                    if(variables[variable].length()<32){
+                      variables[variable] = string(32-variables[variable].length(),'0') + variables[variable];
+                    }
+                } else {
+                    throw invalid_argument("Address must be an integer");
+                }
             }
-
-            }
-
- 
 
             // Get binary address of variable
-
-            std::string getBinary(const std::string& variable) const {
-
+            string getBinary(const string& variable) const {
                 auto it = variables.find(variable);
-
                 if (it != variables.end()) {
-
                     return it->second;
-
                 }
-
                 return "";
-
             }
-
         // Update address of variable
-
-        void updateVariable(const std::string& variable, const std::string& newAddress) {
-
+        void updateVariable(const string& variable, const string& newAddress) {
             auto it = variables.find(variable);
-
             if (it != variables.end()) {
-
-                cout << newAddress << endl;
-
-                it->second = std::bitset<32>(std::stoi(newAddress)).to_string();
-
+                it->second = bitset<32>(stoi(newAddress)).to_string();
             }
-
         }
-
- 
 
         //Remove variable from variable map
-
-        void removeVariable(const std::string& variable) {
-
+        void removeVariable(const string& variable) {
             auto it = variables.find(variable);
-
             if (it != variables.end()) {
-
                 variables.erase(it);
-
             }
-
         }
 
- 
-
-        bool contains(const std::string& variable) const {
-
+        bool contains(const string& variable) const {
             return variables.find(variable) != variables.end();
-
         }
-
         };
 
- 
-
         //Function to read file and store in vector
-
-        void newFile(const std::string& fileName, std::vector<std::string>& fileContent) {
-
-            std::ifstream file("./input/" + fileName);
+        void newFile(const string& fileName, vector<string>& fileContent) {
+            ifstream file("./input/" +fileName);
 
             if (file.is_open()) {
-
-                std::string line;
-
+                string line;
                 while (getline(file, line)) {
-
                     size_t found = line.find(';');
-
-                    if (found != std::string::npos) {
-
+                    if (found != string::npos) {
                         line.erase(found);
-
                     }
-
-                    line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
-
- 
+                    line.erase(remove_if(line.begin(), line.end(), ::isspace), line.end());
 
                     if (!line.empty()) {
-
                         fileContent.push_back(line);
-
                     }
-
                 }
-
                 file.close();
-
             } else {
-
-                throw std::runtime_error("Error: File not found");
-
+                throw runtime_error("Error: File not found");
             }
-
         }
 
         // Extention Function to report progress during Assembly
-
-        void reportProgress(const std::string& message){
-
-            std::cout<<"Progress:" << message << std::endl;
-
+        void reportProgress(const string& message){
+            cout<<"Progress:" << message << endl;
         }
 
- 
-
-        void saveMachineCodeToFile(const std::vector<std::string>& saveMachineLines){
-
-        std::ofstream outputFile("output.txt");
-
+        void saveMachineCodeToFile(const vector<string>& saveMachineLines){
+        ofstream outputFile("output.txt");
         if(outputFile.is_open()){
-
             for (const auto& line : saveMachineLines){
-
-                outputFile << line << std::endl;
+                outputFile << line << endl;
             }
             outputFile.close();
-
-            std::cout << "Machine code saved to testcode.txt" << std::endl;
-
+            cout << "Machine code saved to output.txt" << endl;
         } else {
-
-            throw std::runtime_error ("Error: Unable to save machine code to file");
-
+            throw runtime_error ("Error: Unable to save machine code to file");
         }
-
     }
 
+
     //Function to convert assembly to machine code
-
-        void convertAssembly(const std::vector<std::string>& fileContent, SymbolTable& symbolTable, VariableMap& variableMap, std::map<std::string, std::string>& instructionSet){
-
-            std::string currentAddress = "$0000";
-
+        void convertAssembly(const vector<string>& fileContent, SymbolTable& symbolTable, VariableMap& variableMap, map<string, string>& instructionSet){
+            string currentAddress = "$0000";
             int lineCount = 0;
 
- 
+            vector<string> machineCodeLines;
 
-            std::vector<std::string> machineCodeLines;
+            for (const string& line : fileContent) {
+                istringstream iss(line);
+                string cleanLine;
+                getline(iss, cleanLine, ';'); 
 
- 
-
-            for (const std::string& line : fileContent) {
-
-                std::istringstream iss(line);
-
-                std::string cleanLine;
-
-                std::getline(iss, cleanLine, ';');
-
- 
-
-                cleanLine.erase(std::remove_if(cleanLine.begin(), cleanLine.end(), ::isspace), cleanLine.end());
-
- 
+                cleanLine.erase(remove_if(cleanLine.begin(), cleanLine.end(), ::isspace), cleanLine.end());
 
                 if (cleanLine.empty()) {
-
                     continue;
-
                 }
-
- 
 
                 size_t found = cleanLine.find(':');
-
-                if (found != std::string::npos) {
-
-                    std::string label = cleanLine.substr(0, found);
-
+                if (found != string::npos) {
+                    string label = cleanLine.substr(0, found);
                     if (symbolTable.contains(label)) {
-
                         symbolTable.symbols[label] = currentAddress.substr(1);
-
                         cleanLine = cleanLine.substr(found + 1);
-
                 }
-
                 }
-
- 
 
                 found = cleanLine.find("VAR");
-
-                if(found != std::string::npos){
-
-                    std::string variableDeclaration = cleanLine.substr(found + 3);
-
-                    std::istringstream variableStream(variableDeclaration);
-
-                    std::string variableName;
-
-                    std::string value;
-
- 
+                if(found != string::npos){
+                    string variableDeclaration = cleanLine.substr(found + 3);
+                    istringstream variableStream(variableDeclaration);
+                    string variableName;
+                    string value;
 
                     //Adding variable to Variable map
-
                     variableStream >> variableName >> value;
-
                     variableMap.addVariable(variableName, value);
-
                     continue;
-
                 }
-
                 found = cleanLine.find_first_not_of('\t');
+                if (found != string::npos) {
+                    string instruction = cleanLine.substr(found, 3);
+                    string operand = cleanLine.substr(found + 3);
 
-                if (found != std::string::npos) {
-
-                    std::string instruction = cleanLine.substr(found, 3);
-
-                    std::string operand = cleanLine.substr(found + 3);
-
-                    std::string machineCode;
-
+                    string machineCode;
                     if (operand.empty()) {
-
                         machineCode = "00000";
-
                     } else if(variableMap.contains(operand)) {
-
                         machineCode = variableMap.getBinary(operand);
-
                     }else if(symbolTable.contains(operand)){
-
                         machineCode = symbolTable.getAddress(operand);
-
-                    }
+                    } 
 
                     auto it = instructionSet.find(instruction);
-
                     if (it != instructionSet.end()) {
                         machineCode += it->second;
                     } else {
+                        
                         machineCode += "00000";
                     }
 
-                    std::cout << machineCode << std::endl;
+                    cout << machineCode << endl;
 
                     machineCodeLines.push_back(machineCode);
 
-                    cout << currentAddress.substr(1);
-
-                    int addressValue = std::stoi(currentAddress.substr(1), nullptr, 16);
-
+                    int addressValue = stoi(currentAddress.substr(1), nullptr, 32);
                     addressValue++;
-
-                    std::stringstream stream;
-
-                    stream << std::uppercase << std::setw(3) << std::setfill('0') << std::hex << addressValue;
-
+                    stringstream stream;
+                    stream << uppercase << setw(3) << setfill('0') << hex << addressValue;
                     currentAddress = "$" + stream.str();
-
-                   
-
+                    
                     lineCount++;
 
- 
-
-                    reportProgress("Processd Line"+std::to_string(lineCount)+ "/"+std::to_string(fileContent.size()));
-
+                    reportProgress("Processd Line"+to_string(lineCount)+ "/"+to_string(fileContent.size()));
                 }
-
             }
-
             reportProgress("Assembly complete");
 
- 
             try {
-
                 saveMachineCodeToFile(machineCodeLines);
-
-            } catch (const std::exception& e) {
-
-                std::cout << "Error converting string to integer: " << e.what() << std::endl;
-
+            } catch (const exception& e) {
+                cout << "Error converting string to integer: " << e.what() << endl;
             }
 
         }
 
- 
 
     // Function to output machine code to file
-
-    void codeBufferOutput(const std::string& machineCode) {
-
-            std::cout << machineCode << std::endl;
-
+    void codeBufferOutput(const string& machineCode) {
+            cout << machineCode << endl;
         }
+    // Main function
+    // int main() {
+        // vector<string> fileContent{};
+        // SymbolTable symbolTable;
+        // VariableMap variableMap;
+        // map<string, string> instructionSet;
+
+        // InstructionSet instructions;
+        // instructionSet=instructions.instructions;
+
+        // string fileName;
+        // cout << "Enter file name: ";
+        // cin >> fileName;
+
+        // try {
+        //     newFile(fileName, fileContent);
+        //     convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
+        // } catch (const exception& e) {
+        //     cout <<"Error occurred: "<< e.what() << endl;
+        // }
+
+
+        // return 0;
+    // }

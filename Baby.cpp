@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include <bitset>
+#include <sstream>
 #include "baby.h"
 #include <stdlib.h>
 
@@ -13,7 +14,6 @@ const std::string RESET_COLOR = "\033[0m";
 // constructor
 Baby::Baby()
 {
-    storeSize = SIZE;
     for (int i=0;i<SIZE;i++)
     {
         accumulator += "0";
@@ -239,12 +239,7 @@ void Baby::addInstructionToStore(int lineNumber, string instruction)
 {
     for(int i=0;i<32;i++)
     {
-        if (instruction[i] == '0') 
-        {
-            store[lineNumber][i] = 0;
-        } else {
-            store[lineNumber][i] = 1;
-        }
+        instruction[i] == '0' ? store[lineNumber][i] = 0 : store[lineNumber][i] = 1;
     }
 }
 
@@ -278,16 +273,15 @@ int Baby::getOperand()
 // function to get line from store
 string Baby::getLineFromStore(int lineNumber) 
 {
-    string instruction = "";
-
-    for (int i=0;i<32;i++)
+    bitset<32> lineBits;
+    for (int i = 0; i < 32; i++)
     {
-        instruction += to_string(store[lineNumber][i]);
+        lineBits[31 - i] = store[lineNumber][i];
     }
-
-    return instruction;
+    stringstream ss;
+    ss << lineBits;
+    return ss.str();
 }
-
 
 // CMP incremt CI if accumulator value is negative, otherwise do nothing
 void Baby::CMP()
@@ -295,15 +289,11 @@ void Baby::CMP()
     if (accumulator[31] == '1')
     {
         bool carry = true;
-        for (int i = 0; i < ci.length() && carry; i++)
-        {
-            if (ci[i] == '0')
-            {
+        for (int i = 0; i < ci.length() && carry; i++) {
+            if (ci[i] == '0') {
                 ci[i] = '1';
                 carry = false;
-            }
-            else
-            {
+            } else {
                 ci[i] = '0';
             }
         }
@@ -312,17 +302,10 @@ void Baby::CMP()
 
 // JRP add content of store location to CI
 void Baby::JRP() {
-  int operand = getOperand();
-  int ciValue = binaryToDecimal(ci);
-  int result = ciValue + operand;
-
-  for (int i = 31; i >= 0; i--) {
-    if (result & (1 << i)) {
-      ci[i] = '1';
-    } else {
-      ci[i] = '0';
-    }
-  }
+    int operand = getOperand(), ciValue = binaryToDecimal(ci);
+    ciValue += operand;
+    ci = decimalToBinary(ciValue);
+    ci = string(32 - ci.length(), '0') + ci;
 }
 
 // LDN load accumulator with negative form of store content

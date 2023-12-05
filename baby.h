@@ -9,7 +9,6 @@ using namespace std;
 
 class Baby{
     private: 
-    
         int storeSize;
         string accumulator;
         bool store[SIZE][SIZE];
@@ -29,12 +28,12 @@ class Baby{
         int decode();
         
 
-        void JMP();
-        void JRP();
-        void LDN();
-        void STO();
         int SUB();
+        void JRP();
+        void STO();
+        void LDN();
         void CMP();
+        void JMP();
 
         Baby();
         ~Baby();
