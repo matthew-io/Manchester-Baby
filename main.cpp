@@ -118,7 +118,7 @@ int main()
 }
 
 void assembler() {
-    vector<string> fileContent;
+    vector<string> fileContent{};
     SymbolTable symbolTable;
     VariableMap variableMap;
     map<string, string> instructionSet;
@@ -133,4 +133,5 @@ void assembler() {
     } catch (const exception& e) {
         cout << e.what() << endl;
     }
+
  }
