@@ -102,7 +102,7 @@
 
     //Function to read file and store in vector
     void newFile(const std::string& fileName, std::vector<std::string>& fileContent) {
-        std::ifstream file(fileName);
+        std::ifstream file("./input/" + fileName);
 
         if (file.is_open()) {
             std::string line;
@@ -125,7 +125,7 @@
 
     // Extention Function to report progress during Assembly
     void reportProgress(const std::string&message){
-        std::cout<<"Progress:" << message << std::endl;
+        std::cout<<"Progress: " << message << std::endl;
     }
 
    //Function to convert assembly to machine code
@@ -179,6 +179,8 @@
             stream << std::uppercase << std::setw(3) << std::setfill('0') << std::hex << addressValue;
             currentAddress = "$" + stream.str();
             
+            int lineCount = 0;
+
             reportProgress("Processd Line"+std::to_string(lineCount)+ "/"+std::to_string(fileContent.size()));
         }
     }
@@ -191,22 +193,22 @@ void codeBufferOutput(const std::string& machineCode) {
         std::cout << machineCode << std::endl;
     }
 // Main function
-int main() {
-    std::vector<std::string> fileContent;
-    SymbolTable symbolTable;
-    VariableMap variableMap;
-    std::map<std::string, std::string> instructionSet;
+// int main() {
+//     std::vector<std::string> fileContent;
+//     SymbolTable symbolTable;
+//     VariableMap variableMap;
+//     std::map<std::string, std::string> instructionSet;
 
-    std::string fileName;
-    std::cout << "Enter file name: ";
-    std::cin >> fileName;
+//     std::string fileName;
+//     std::cout << "Enter file name: ";
+//     std::cin >> fileName;
 
-    try {
-        newFile(fileName, fileContent);
-        convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
+//     try {
+//         newFile(fileName, fileContent);
+//         convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
+//     } catch (const std::exception& e) {
+//         std::cout << e.what() << std::endl;
+//     }
 
-    return 0;
- }
+//     return 0;
+//  }
