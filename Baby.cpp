@@ -4,7 +4,13 @@
 #include <cmath>
 #include <bitset>
 #include "baby.h"
+#include <stdlib.h>
 
+const std::string RED_TEXT = "\033[31m";
+const std::string GREEN_TEXT = "\033[32m";
+const std::string RESET_COLOR = "\033[0m";
+
+// constructor
 Baby::Baby()
 {
     storeSize = SIZE;
@@ -21,13 +27,16 @@ Baby::Baby()
     }
 }
 
+// deconstructor
 Baby::~Baby()
 {
 }
 
+// function to incriement control instruction
 void Baby::incrementCI()
 {
     bool carry = true;
+    // increase binary number by one
     for (int i = 0; i < ci.length() && carry; i++)
     {
         if (ci[i] == '0')
@@ -42,78 +51,143 @@ void Baby::incrementCI()
     }
 }
 
+// function to fetch decode and executre
 int Baby::fetch()
 {
+    // fetch
     int lineNumber = binaryToDecimal(ci);
     pi = getLineFromStore(lineNumber);
 
+    // decode
 	int opcode = getOpcode();
 
+    // execute
+    // if statements for each possible opcode
     if (opcode == 0)
     {
-        cout << "Executing the JMP instruction" << endl;
-        JMP();
-        return 1;
+        cout << "INSTRUCTION: JMP" << endl;
+        if (runOrTerminate() == 1) {
+            JMP();
+            return 1;
+        } else {
+            return 0;
+        }
     };
     if (opcode == 1)
     {
-        cout << "Executing the JRP instruction" << endl;
-        JRP();
-        return 1;
+        cout << "INSTRUCTION: JRP" << endl;
+        if (runOrTerminate() == 1) {
+            JRP();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 2)
     {
-        cout << "Executing the LDN instruction" << endl;
-        LDN();
-        return 1;
+        cout << "INSTRUCTION: LDN" << endl;
+        if (runOrTerminate() == 1) {
+            LDN();
+            return 1;
+        } else {
+            return 0;
+        }
     };
     if (opcode == 3)
     {
-        cout << "Executing the STO instruction" << endl;
-        STO();
-        return 1;
+        cout << "INSTRUCTION: STO" << endl;
+        if (runOrTerminate() == 1) {
+            STO();
+            return 1;
+        } else {
+            return 0;
+        }
     };
     if (opcode ==4)
     {
-        cout << "Executing the SUB instruction" << endl;
-        SUB();
-        return 1;
+        cout << "INSTRUCTION: SUB" << endl;
+        if (runOrTerminate() == 1) {
+            SUB();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 5)
     {
-        cout << "Executing the SUB instruction" << endl;
-        SUB();
-        return 1;
+        cout << "INSTRUCTION: SUB" << endl;
+        if (runOrTerminate() == 1) {
+            SUB();
+            return 1;
+        } else {
+            return 0;
+        }
     }
     if (opcode == 6)
     {
-        cout << "Executing the CMP instruction" << endl;
-        CMP();
-        return 1;
+        cout << "INSTRUCTION: CMP" << endl;
+        if (runOrTerminate() == 1) {
+            CMP();
+            return 1;
+        } else {
+            return 0;
+        }
     }
+    
+    // if 7 stop
     if (opcode == 7)
     {
-        cout << "Exiting the program..." << endl;
         return 0;
     }
 }
 
+// function that gets user input to keep program running or end it
+int runOrTerminate()
+{
+    char choice;
+    
+    cout << endl;
+    cout << "Press 'e' to continue executing the program or any other key to terminate this run." << endl;
+    cin >> choice;
+
+    if (choice == 'e')
+    {
+        return 1;
+    } else {
+        return 0;
+    }
+    
+    return 0;
+}
+
+// function to print state of store and other variables
 void Baby::printState()
 {
     for (int i=0;i<storeSize;i++)
     {
+        cout << (i+1);
+        i < 9 ? cout << "    " : cout << "   ";
         for (int j=0;j<storeSize;j++) 
         {
             cout << store[i][j];
         }
         cout << endl;
 	}
-	cout << endl;
+
+    int opcode = getOpcode();
+    int operand = getOperand();
+    
+    cout << endl;
+    opcode == 7 ? cout << "STOP LIGHT: " << GREEN_TEXT << "ON" << RESET_COLOR << endl :
+    cout << "STOP LIGHT: " << RED_TEXT << "OFF" << RESET_COLOR << endl;
+    cout << endl;
 	cout << "ACCUMULATOR: " << accumulator << " | " << binaryToDecimal(accumulator) << endl;
-	cout << "OPERAND: " << getOperand() << endl;
-	cout << "OPCODE: " << getOpcode() << endl;
+    cout << "OPERAND: " << operand << endl;
+	cout << "OPCODE: " << opcode << endl;
+    opcode == 7 ? cout << endl << "Exiting the program..." << endl : cout << "";
 }
 
+// function to add instruction to store
 void Baby::addInstructionToStore(int lineNumber, string instruction)
 {
     for(int i=0;i<32;i++)
@@ -127,6 +201,7 @@ void Baby::addInstructionToStore(int lineNumber, string instruction)
     }
 }
 
+// function to get opcode
 int Baby::getOpcode()
 {
     string opCode = "";
@@ -143,15 +218,17 @@ int Baby::getOperand()
 {
     string operand = "";
 
+    // recieve the binary value of the first 5 digits of the pi
     for (int i=0;i<5;i++)
     {
         operand += pi[i];
     }
 
+    // conver this binary value to a decimal value
     return binaryToDecimal(operand);
 }
 
-
+// function to get line from store
 string Baby::getLineFromStore(int lineNumber) 
 {
     string instruction = "";
@@ -164,12 +241,14 @@ string Baby::getLineFromStore(int lineNumber)
     return instruction;
 }
 
+// JMP set CI to content of store location
 void Baby::JMP()
 {
     int operand = getOperand();
     ci = getLineFromStore(operand);
 }  
 
+// JRP add content of store location to CI
 void Baby::JRP() {
   int operand = getOperand();
   int ciValue = binaryToDecimal(ci);
@@ -184,6 +263,7 @@ void Baby::JRP() {
   }
 }
 
+// LDN load accumulator with negative form of store content
 void Baby::LDN()
 {
 	int lineNumber = getOperand();
@@ -206,6 +286,7 @@ void Baby::LDN()
 	}
 }
 
+// STO copy accumulator to store location
 void Baby::STO()
 {
 	int lineNumber = getOperand();
@@ -221,13 +302,14 @@ void Baby::STO()
 	}
 }
 
+// SUB subrtract content of store location from accumulator
 int Baby::SUB()
 {
 	int lineNumber = getOperand();
 	string binaryValue = getLineFromStore(lineNumber);
 	int result = binaryToDecimal(accumulator) - binaryToDecimal(binaryValue);
 
-	if (result > INT_MAX || result < INT_MIN)
+	if (result > MAX_NUM || result < MIN_NUM)
 	{
 		return 0;
 	}
@@ -249,6 +331,7 @@ int Baby::SUB()
 	return 1;
 }
 
+// CMP incremt CI if accumulator value is negative, otherwise do nothing
 void Baby::CMP()
 {
     if (accumulator[31] == '1')
@@ -268,6 +351,3 @@ void Baby::CMP()
         }
     }
 }
-
-
-
