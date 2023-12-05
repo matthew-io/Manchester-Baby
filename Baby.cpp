@@ -14,13 +14,12 @@ const std::string RESET_COLOR = "\033[0m";
 Baby::Baby()
 {
     storeSize = SIZE;
-    accumulator = "00000000000000000000000000000000";
-    ci = "00000000000000000000000000000000";
-    pi = "00000000000000000000000000000000";
-
-    for (int i=0;i<storeSize;i++)
+    for (int i=0;i<SIZE;i++)
     {
-        for (int j=0;j<storeSize;j++)
+        accumulator += "0";
+        ci += "0";
+        pi += "0";
+        for (int j=0;j<SIZE;j++)
         {
             store[i][j] = 0;
         }
@@ -52,7 +51,7 @@ void Baby::incrementCI()
 }
 
 // function to fetch decode and executre
-int Baby::fetch()
+int Baby::fetch(char choice)
 {
     // fetch
     int lineNumber = binaryToDecimal(ci);
@@ -66,71 +65,115 @@ int Baby::fetch()
     if (opcode == 0)
     {
         cout << "INSTRUCTION: JMP" << endl;
-        if (continueRun() == 1) {
+        if (choice == 'y')
+        {
             JMP();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                JMP();
+                return 1;
+            } else {
+                return 0;
+            }
         }
     };
     if (opcode == 1)
     {
         cout << "INSTRUCTION: JRP" << endl;
-        if (continueRun() == 1) {
+        if (choice == 'y')
+        {
             JRP();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                JRP();
+                return 1;
+            } else {
+                return 0;
+            }
         }
+        
     }
     if (opcode == 2)
     {
         cout << "INSTRUCTION: LDN" << endl;
-        if (continueRun() == 1) {
+        if (choice == 'y')
+        {
             LDN();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                LDN();
+                return 1;
+            } else {
+                return 0;
+            }    
         }
     };
     if (opcode == 3)
     {
         cout << "INSTRUCTION: STO" << endl;
-        if (continueRun() == 1) {
+         if (choice == 'y'){
             STO();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                STO();
+                return 1;
+            } else {
+                return 0;
+            }
         }
     };
     if (opcode ==4)
     {
         cout << "INSTRUCTION: SUB" << endl;
-        if (continueRun() == 1) {
+        if (choice == 'y')
+        {
             SUB();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                SUB();
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
+
     if (opcode == 5)
     {
         cout << "INSTRUCTION: SUB" << endl;
-        if (continueRun() == 1) {
+        if (choice == 'y')
+        {
             SUB();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                SUB();
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
     if (opcode == 6)
     {
         cout << "INSTRUCTION: CMP" << endl;
-        if (continueRun() == 1) {
+        
+        if (choice == 'y')
+        {
             CMP();
             return 1;
         } else {
-            return 0;
+            if (continueRun() == 1) {
+                CMP();
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
     
@@ -147,21 +190,25 @@ int Baby::continueRun()
     char choice;
     
     cout << endl;
-    cout << "Press 'e' to continue executing the program. Press any other key to stop the run" << endl;
+    cout << "Press 'c' to continue executing the program. Press 'x' to stop the run." << endl;
     cin >> choice;
 
-    if (choice == 'e')
-    {
-        return 1;
-    } else {
-        return 0;
-    }
+    do {
+        if (choice != 'c' && choice != 'x')
+        {
+            cout << "Invalid key. Please try again." << endl;
+            cin >> choice; 
+        }
+        if (choice == 'c') {
+            return 1;
+        }
+    } while (choice != 'x');
     
     return 0;
 }
 
 // function to print state of store and other variables
-void Baby::printState()
+void Baby::printStore()
 {
     for (int i=0;i<SIZE;i++)
     {
@@ -241,82 +288,6 @@ string Baby::getLineFromStore(int lineNumber)
     return instruction;
 }
 
-// JMP set CI to content of store location
-void Baby::JMP()
-{
-    int operand = getOperand();
-    ci = getLineFromStore(operand);
-}  
-
-// JRP add content of store location to CI
-void Baby::JRP() {
-  int operand = getOperand();
-  int ciValue = binaryToDecimal(ci);
-  int result = ciValue + operand;
-
-  for (int i = 31; i >= 0; i--) {
-    if (result & (1 << i)) {
-      ci[i] = '1';
-    } else {
-      ci[i] = '0';
-    }
-  }
-}
-
-// LDN load accumulator with negative form of store content
-void Baby::LDN()
-{
-    int lineNumber = getOperand();
-    string binaryValue = getLineFromStore(lineNumber);
-
-    int decimalValue = binaryToDecimal(binaryValue);
-    string negativeBinary = decimalToBinary(-decimalValue);
-
-    for (int i = 0; i < negativeBinary.length(); ++i)
-    {
-        accumulator[31 - i] = negativeBinary[negativeBinary.length() - 1 - i];
-    }
-}
-
-// STO copy accumulator to store location
-void Baby::STO()
-{
-	int lineNumber = getOperand();
-	
-	for (int i=0;i<SIZE;i++)
-	{
-		if (accumulator[i] == '0') 
-		{
-			store[lineNumber][i] = 0;
-		} else {
-			store[lineNumber][i] = 1;
-		}
-	}
-}
-
-// SUB subrtract content of store location from accumulator
-int Baby::SUB()
-{
-    int lineNumber = getOperand();
-    string binaryValue = getLineFromStore(lineNumber);
-    
-    int result = binaryToDecimal(accumulator) - binaryToDecimal(binaryValue);
-
-    if (result > MAX_NUM || result < MIN_NUM)
-    {
-        return 0;
-    }
-
-    string binaryResult = decimalToBinary(result);
-
-    int start = 32 - binaryResult.length();
-    for (int i = 0; i < binaryResult.length(); ++i)
-    {
-        accumulator[start + i] = binaryResult[i];
-    }
-
-    return 1;
-}
 
 // CMP incremt CI if accumulator value is negative, otherwise do nothing
 void Baby::CMP()
@@ -338,3 +309,70 @@ void Baby::CMP()
         }
     }
 }
+
+// JRP add content of store location to CI
+void Baby::JRP() {
+  int operand = getOperand();
+  int ciValue = binaryToDecimal(ci);
+  int result = ciValue + operand;
+
+  for (int i = 31; i >= 0; i--) {
+    if (result & (1 << i)) {
+      ci[i] = '1';
+    } else {
+      ci[i] = '0';
+    }
+  }
+}
+
+// LDN load accumulator with negative form of store content
+void Baby::LDN()
+{
+	int lineNumber = getOperand();
+	string binaryValue = getLineFromStore(lineNumber);
+
+	int negativeDecimalValue = -binaryToDecimal(binaryValue);
+	
+	string negativeBinary = decimalToBinary(negativeDecimalValue);
+
+	for (int i=0; i<negativeBinary.length(); i++)
+	{
+        negativeBinary[i] == '0' ? accumulator[31 - i] = '0' : accumulator[31 - i] = '1';
+	}
+}
+
+// JMP set CI to content of store location
+void Baby::JMP()
+{
+    int operand = getOperand();
+    ci = getLineFromStore(operand);
+}  
+
+// SUB subrtract content of store location from accumulator
+int Baby::SUB()
+{
+	int lineNumber = getOperand();
+	string binaryValue = getLineFromStore(lineNumber);
+	int result = binaryToDecimal(accumulator) - binaryToDecimal(binaryValue);
+
+	string binary = decimalToBinary(result);
+
+	for (int i=0; i<binary.length(); i++)
+	{
+        binary[i] == '0' ? accumulator[31 - i] = '0' : accumulator[31 - i] = '1';
+	}
+
+	return 1;
+}
+
+// STO copy accumulator to store location
+void Baby::STO()
+{
+    int line = getOperand();
+    
+    for (int i = 0; i < SIZE; i++)
+    {
+        store[line][i] = (accumulator[i] == '0') ? 0 : 1;
+    }
+}
+

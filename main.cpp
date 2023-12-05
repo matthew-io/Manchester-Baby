@@ -78,11 +78,11 @@ int main()
     string file_name;
     fstream test_data;
 
-    cout << "Enter the name of the file you would like to add: " << endl;
+    cout << "Enter the name of the file you would like to load: " << endl;
     while (true) {
         cin >> file_name;
 
-        test_data.open("/input/" + file_name, ios::in);
+        test_data.open("./input/" + file_name, ios::in);
 
         if (test_data.is_open()) {
             string data;
@@ -100,15 +100,28 @@ int main()
     }
 
     bool quit = false;
+    char choice;
+
+    cout << "Enter 'y' to have all instructions executed immediately, or 'n' to run them one at a time." << endl;
+    cin >> choice;
+
+    do {
+        if (choice != 'y' && choice != 'n') {
+            cout << "Invalid key, please try again." << endl;
+            cin >> choice;
+        }
+    } while (choice != 'y' && choice != 'n');
+
+    
 
     do {
         baby->incrementCI();
-        baby->printState();
-        int code = baby->fetch();
+        baby->printStore();
+        int code = baby->fetch(choice);
 
         if (code == 0)
         {
-            baby->printState();
+            baby->printStore();
             quit = true;
         }
     } while (quit == false);
@@ -118,19 +131,28 @@ int main()
 }
 
 void assembler() {
-    vector<string> fileContent;
-    SymbolTable symbolTable;
-    VariableMap variableMap;
-    map<string, string> instructionSet;
+    
+        vector<string> fileContent{};
+        SymbolTable symbolTable;
+        VariableMap variableMap;
+        map<string, string> instructionSet;
+        InstructionSet instructions;
+        instructionSet=instructions.instructions;
+        string fileName;
 
-    string fileName;
-    cout << "Enter file name: ";
-    cin >> fileName;
+        cout << "Enter file name: ";
 
-    try {
-        newFile(fileName, fileContent);
-        convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
-    } catch (const exception& e) {
-        cout << e.what() << endl;
-    }
+        cin >> fileName;
+
+        try {
+
+            newFile(fileName, fileContent);
+
+            convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
+
+        } catch (const exception& e) {
+
+            cout <<"Error occurred: "<< e.what() << endl;
+
+        }
  }

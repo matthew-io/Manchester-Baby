@@ -17,13 +17,13 @@ class Baby{
         string pi;
 
     public:
-        void printState();
+        void printStore();
         void addInstructionToStore(int lineNumber, string instruction);
         int getOpcode();
         int getOperand();
         void incrementCI();
         int continueRun();
-        int fetch();
+        int fetch(char choice);
         string getLineFromStore(int operand);
         string negateBinary(const string& binaryValue);
         int decode();
