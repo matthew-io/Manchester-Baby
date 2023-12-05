@@ -3,9 +3,6 @@
 using namespace std;
 
 #define SIZE 32
-#define MAX_NUM 2147483647
-#define MIN_NUM -2147483647
-
 
 class Baby{
     private: 
