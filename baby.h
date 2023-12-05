@@ -9,9 +9,8 @@ using namespace std;
 
 class Baby{
     private: 
-        int storeSize;
+        int store[SIZE][SIZE];
         string accumulator;
-        bool store[SIZE][SIZE];
         string ci;
         string pi;
 
