@@ -15,15 +15,23 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <iterator>
+#include <map>
+#include <iomanip>
+#include <bitset>
+#include <vector>
+#include "Assembler.h"
 
 // function to display menu options
 void displayMenu()
 {
     cout << "Choose an option:" << endl;
     cout << "[1] Load a text file containing instructions" << endl;
-    cout << "[2] Quit" << endl;
+    cout << "[2] Load assembly file" << endl;
+    cout << "[3] Quit" << endl;
 }
 
+void assembler();
 
 int main()
 {
@@ -37,7 +45,7 @@ int main()
         cin >> input;
 
         // repeat until valid input is recieved
-        while (input != '1' && input != '2')
+        while (input != '1' && input != '2' && input != '3')
         {
             cout << "Invalid input, please enter a valid option" << endl;
             displayMenu();
@@ -51,8 +59,14 @@ int main()
             cin >> input;
         }
 
-        // if input is 2 quit
+        // if input is 2 run assembler
         if (input == '2')
+        {
+            assembler();
+        }
+
+        // if input is 3 quit
+        if (input == '3')
         {
             return 0;
         }
@@ -102,3 +116,21 @@ int main()
     delete baby;
     return 0;
 }
+
+void assembler() {
+    vector<string> fileContent;
+    SymbolTable symbolTable;
+    VariableMap variableMap;
+    map<string, string> instructionSet;
+
+    string fileName;
+    cout << "Enter file name: ";
+    cin >> fileName;
+
+    try {
+        newFile(fileName, fileContent);
+        convertAssembly(fileContent, symbolTable, variableMap, instructionSet);
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
+ }
