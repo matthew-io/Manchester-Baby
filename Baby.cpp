@@ -66,7 +66,7 @@ int Baby::fetch()
     if (opcode == 0)
     {
         cout << "INSTRUCTION: JMP" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun == 1) {
             JMP();
             return 1;
         } else {
@@ -76,7 +76,7 @@ int Baby::fetch()
     if (opcode == 1)
     {
         cout << "INSTRUCTION: JRP" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun == 1) {
             JRP();
             return 1;
         } else {
@@ -86,7 +86,7 @@ int Baby::fetch()
     if (opcode == 2)
     {
         cout << "INSTRUCTION: LDN" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun() == 1) {
             LDN();
             return 1;
         } else {
@@ -96,7 +96,7 @@ int Baby::fetch()
     if (opcode == 3)
     {
         cout << "INSTRUCTION: STO" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun() == 1) {
             STO();
             return 1;
         } else {
@@ -106,7 +106,7 @@ int Baby::fetch()
     if (opcode ==4)
     {
         cout << "INSTRUCTION: SUB" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun() == 1) {
             SUB();
             return 1;
         } else {
@@ -116,7 +116,7 @@ int Baby::fetch()
     if (opcode == 5)
     {
         cout << "INSTRUCTION: SUB" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun() == 1) {
             SUB();
             return 1;
         } else {
@@ -126,7 +126,7 @@ int Baby::fetch()
     if (opcode == 6)
     {
         cout << "INSTRUCTION: CMP" << endl;
-        if (runOrTerminate() == 1) {
+        if (continueRun() == 1) {
             CMP();
             return 1;
         } else {
@@ -142,12 +142,12 @@ int Baby::fetch()
 }
 
 // function that gets user input to keep program running or end it
-int runOrTerminate()
+int continueRun()
 {
     char choice;
     
     cout << endl;
-    cout << "Press 'e' to continue executing the program or any other key to terminate this run." << endl;
+    cout << "Press 'e' to continue executing the program. Press any other key to stop the run" << endl;
     cin >> choice;
 
     if (choice == 'e')
@@ -161,13 +161,13 @@ int runOrTerminate()
 }
 
 // function to print state of store and other variables
-void Baby::printState()
+void Baby::printStore()
 {
-    for (int i=0;i<storeSize;i++)
+    for (int i=0;i<SIZE;i++)
     {
         cout << (i+1);
         i < 9 ? cout << "    " : cout << "   ";
-        for (int j=0;j<storeSize;j++) 
+        for (int j=0;j<SIZE;j++) 
         {
             cout << store[i][j];
         }
