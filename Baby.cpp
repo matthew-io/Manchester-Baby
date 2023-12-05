@@ -66,7 +66,7 @@ int Baby::fetch()
     if (opcode == 0)
     {
         cout << "INSTRUCTION: JMP" << endl;
-        if (continueRun() == 1) {
+        if (continueRun == 1) {
             JMP();
             return 1;
         } else {
