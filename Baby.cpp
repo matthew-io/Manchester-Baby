@@ -76,7 +76,7 @@ int Baby::fetch()
     if (opcode == 1)
     {
         cout << "INSTRUCTION: JRP" << endl;
-        if (continueRun() == 1) {
+        if (continueRun == 1) {
             JRP();
             return 1;
         } else {
