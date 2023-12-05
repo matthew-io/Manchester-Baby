@@ -11,7 +11,7 @@ string decimalToBinary(int decimal)
         return "0";
     }
 
-    std::string binary = "";
+    string binary = "";
     bool isNegative = decimal < 0;
     
     // remove '-' sign from number if negative
@@ -22,7 +22,7 @@ string decimalToBinary(int decimal)
 
     while (decimal > 0)
     {
-        binary = std::to_string(decimal % 2) + binary;
+        binary = to_string(decimal % 2) + binary;
         decimal /= 2;
     }
 
