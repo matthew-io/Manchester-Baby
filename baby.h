@@ -6,7 +6,6 @@ using namespace std;
 #define MAX_NUM 2147483647
 #define MIN_NUM -2147483647
 
-int runOrTerminate();
 
 class Baby{
     private: 
@@ -18,12 +17,12 @@ class Baby{
         string pi;
 
     public:
-
         void printState();
         void addInstructionToStore(int lineNumber, string instruction);
         int getOpcode();
         int getOperand();
         void incrementCI();
+        int continueRun();
         int fetch();
         string getLineFromStore(int operand);
         string negateBinary(const string& binaryValue);

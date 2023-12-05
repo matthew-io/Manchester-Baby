@@ -66,7 +66,7 @@ int Baby::fetch()
     if (opcode == 0)
     {
         cout << "INSTRUCTION: JMP" << endl;
-        if (continueRun == 1) {
+        if (continueRun() == 1) {
             JMP();
             return 1;
         } else {
@@ -76,7 +76,7 @@ int Baby::fetch()
     if (opcode == 1)
     {
         cout << "INSTRUCTION: JRP" << endl;
-        if (continueRun == 1) {
+        if (continueRun() == 1) {
             JRP();
             return 1;
         } else {
@@ -142,7 +142,7 @@ int Baby::fetch()
 }
 
 // function that gets user input to keep program running or end it
-int continueRun()
+int Baby::continueRun()
 {
     char choice;
     
@@ -161,7 +161,7 @@ int continueRun()
 }
 
 // function to print state of store and other variables
-void Baby::printStore()
+void Baby::printState()
 {
     for (int i=0;i<SIZE;i++)
     {
@@ -266,24 +266,16 @@ void Baby::JRP() {
 // LDN load accumulator with negative form of store content
 void Baby::LDN()
 {
-	int lineNumber = getOperand();
-	string binaryValue = getLineFromStore(lineNumber);
+    int lineNumber = getOperand();
+    string binaryValue = getLineFromStore(lineNumber);
 
-	int negativeDecimalValue = binaryToDecimal(binaryValue) *-1;
-	
-	string negativeBinary = decimalToBinary(negativeDecimalValue);
+    int decimalValue = binaryToDecimal(binaryValue);
+    string negativeBinary = decimalToBinary(-decimalValue);
 
-	for (unsigned int i=0; i<negativeBinary.length(); i++)
-	{
-		if (negativeBinary[i] == '0')
-		{
-			accumulator[31 - i] = '0';
-		}
-		else
-		{
-			accumulator[31 - i] = '1';
-		}
-	}
+    for (int i = 0; i < negativeBinary.length(); ++i)
+    {
+        accumulator[31 - i] = negativeBinary[negativeBinary.length() - 1 - i];
+    }
 }
 
 // STO copy accumulator to store location
@@ -305,30 +297,25 @@ void Baby::STO()
 // SUB subrtract content of store location from accumulator
 int Baby::SUB()
 {
-	int lineNumber = getOperand();
-	string binaryValue = getLineFromStore(lineNumber);
-	int result = binaryToDecimal(accumulator) - binaryToDecimal(binaryValue);
+    int lineNumber = getOperand();
+    string binaryValue = getLineFromStore(lineNumber);
+    
+    int result = binaryToDecimal(accumulator) - binaryToDecimal(binaryValue);
 
-	if (result > MAX_NUM || result < MIN_NUM)
-	{
-		return 0;
-	}
+    if (result > MAX_NUM || result < MIN_NUM)
+    {
+        return 0;
+    }
 
-	string binary = decimalToBinary(result);
+    string binaryResult = decimalToBinary(result);
 
-	for (unsigned int i=0; i<binary.length(); i++)
-	{
-		if (binary[i] == '0')
-		{
-			accumulator[31 - i] = '0';
-		}
-		else
-		{
-			accumulator[31 - i] = '1';
-		}
-	}
+    int start = 32 - binaryResult.length();
+    for (int i = 0; i < binaryResult.length(); ++i)
+    {
+        accumulator[start + i] = binaryResult[i];
+    }
 
-	return 1;
+    return 1;
 }
 
 // CMP incremt CI if accumulator value is negative, otherwise do nothing
