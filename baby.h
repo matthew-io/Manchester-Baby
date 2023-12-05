@@ -6,7 +6,7 @@ using namespace std;
 #define MAX_NUM 2147483647
 #define MIN_NUM -2147483647
 
-int runOrTerminate();
+int continueRun();
 
 class Baby{
     private: 
@@ -19,7 +19,7 @@ class Baby{
 
     public:
 
-        void printState();
+        void printStore();
         void addInstructionToStore(int lineNumber, string instruction);
         int getOpcode();
         int getOperand();

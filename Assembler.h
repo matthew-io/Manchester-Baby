@@ -133,7 +133,7 @@
     }
 
     void saveMachineCodeToFile(const vector<string>& saveMachineLines){
-    ofstream outputFile("testcode.txt");
+    ofstream outputFile("output.txt");
     if(outputFile.is_open()){
         for (const auto& line : saveMachineLines){
             outputFile << line << endl;
@@ -221,4 +221,4 @@
 // Function to output machine code to file
 void codeBufferOutput(const string& machineCode) {
         cout << machineCode << endl;
-    }
+}

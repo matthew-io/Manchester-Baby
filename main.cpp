@@ -103,17 +103,18 @@ int main()
 
     do {
         baby->incrementCI();
-        baby->printState();
+        baby->printStore();
         int code = baby->fetch();
 
         if (code == 0)
         {
-            baby->printState();
+            baby->printStore();
             quit = true;
         }
     } while (quit == false);
 
     delete baby;
+
     return 0;
 }
 
